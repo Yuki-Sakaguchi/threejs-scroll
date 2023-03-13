@@ -7,6 +7,7 @@ import gsap from "gsap";
 export class Motion {
   lerp_scroll;
   params;
+  isDown: boolean;
 
   constructor() {
     this.params = {
@@ -37,6 +38,8 @@ export class Motion {
       },
     };
 
+    this.isDown = false;
+
     gsap.ticker.add(this.onRaf.bind(this));
     gsap.ticker.fps(30);
 
@@ -45,11 +48,24 @@ export class Motion {
 
   init() {
     window.addEventListener("wheel", this.onWheel.bind(this));
+    window.addEventListener("mousedown", this.onTouchDown.bind(this));
+    window.addEventListener("mousemove", this.onTouchMove.bind(this));
+    window.addEventListener("mouseup", this.onTouchUp.bind(this));
+    window.addEventListener("touchstart", this.onTouchDown.bind(this));
+    window.addEventListener("touchmove", this.onTouchMove.bind(this));
+    window.addEventListener("touchend", this.onTouchUp.bind(this));
   }
 
   destroy() {
     window.removeEventListener("wheel", this.onWheel.bind(this));
+    window.removeEventListener("mousedown", this.onTouchDown.bind(this));
+    window.removeEventListener("mousemove", this.onTouchMove.bind(this));
+    window.removeEventListener("mouseup", this.onTouchUp.bind(this));
+    window.removeEventListener("touchstart", this.onTouchDown.bind(this));
+    window.removeEventListener("touchmove", this.onTouchMove.bind(this));
+    window.removeEventListener("touchend", this.onTouchUp.bind(this));
   }
+
   toUpdateX() {
     this.lerp_scroll.x.current = lerp(
       this.lerp_scroll.x.current,
@@ -69,7 +85,22 @@ export class Motion {
   onWheel(e: WheelEvent) {
     this.lerp_scroll.y.target += 0.5 * e.deltaY;
     this.lerp_scroll.x.target += 0.5 * e.deltaX;
-    console.log("wheel", this.lerp_scroll);
+  }
+
+  onTouchDown() {
+    console.log("down");
+    this.isDown = true;
+  }
+
+  onTouchMove() {
+    if (this.isDown) {
+      console.log("move");
+    }
+  }
+
+  onTouchUp() {
+    console.log("up");
+    this.isDown = false;
   }
 
   onRaf() {
