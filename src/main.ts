@@ -8,6 +8,7 @@ import {
   PerspectiveCamera,
   BoxGeometry,
   MeshBasicMaterial,
+  MeshNormalMaterial,
   Mesh,
 } from "three";
 // import { GUI }from 'dat.gui';
@@ -23,9 +24,8 @@ import {
 
 const motion = new Motion();
 motion.update = () => {
-  console.log(motion.lerp_scroll)
-  cube.rotation.x = motion.lerp_scroll.x.current;
-  cube.rotation.y = motion.lerp_scroll.y.current;
+  cube.rotation.x = motion.lerp_scroll.y.current * 0.01;
+  cube.rotation.y = motion.lerp_scroll.x.current * 0.01;
 };
 
 let scene = new Scene();
@@ -46,7 +46,7 @@ document.body.appendChild(renderer.domElement);
 // controls.update();
 
 let geometry = new BoxGeometry(1, 1, 1);
-let material = new MeshBasicMaterial({ color: 0x00ff00 });
+let material = new MeshNormalMaterial();
 let cube = new Mesh(geometry, material);
 scene.add(cube);
 
