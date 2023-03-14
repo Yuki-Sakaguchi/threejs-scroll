@@ -7,6 +7,7 @@ import gsap from "gsap";
 export class Motion {
   lerp_scroll;
   params;
+  touch;
   isDown: boolean;
 
   constructor() {
@@ -36,6 +37,18 @@ export class Motion {
         target: 0,
         last: 0,
       },
+    };
+
+    this.touch = {
+      x: {
+        start: 0,
+        position: 0,
+      },
+      y: {
+        start: 0,
+        position: 0,
+      },
+      position: 0,
     };
 
     this.isDown = false;
@@ -87,14 +100,34 @@ export class Motion {
     this.lerp_scroll.x.target += 0.5 * e.deltaX;
   }
 
-  onTouchDown() {
+  onTouchDown(e: TouchEvent | MouseEvent) {
     console.log("down");
     this.isDown = true;
+    this.touch.x.position = this.lerp_scroll.x.current;
+    this.touch.y.position = this.lerp_scroll.y.current;
+    if ("touches" in e) {
+      this.touch.x.start = e.touches[0].clientX;
+      this.touch.y.start = e.touches[0].clientY;
+    } else {
+      this.touch.x.start = e.clientX;
+      this.touch.y.start = e.clientY;
+    }
   }
 
-  onTouchMove() {
+  onTouchMove(e: TouchEvent | MouseEvent) {
     if (this.isDown) {
       console.log("move");
+      if ("touches" in e) {
+        const i = -2 * (this.touch.x.start - e.touches[0].clientX) * 2;
+        const r = -2 * (this.touch.y.start - e.touches[0].clientY) * 2;
+        this.lerp_scroll.x.target = this.touch.x.position + i;
+        this.lerp_scroll.y.target = this.touch.y.position + r;
+      } else {
+        const i = -2 * (this.touch.x.start - e.clientX) * 2;
+        const r = -2 * (this.touch.y.start - e.clientY) * 2;
+        this.lerp_scroll.x.target = this.touch.x.position + i;
+        this.lerp_scroll.y.target = this.touch.y.position + r;
+      }
     }
   }
 
