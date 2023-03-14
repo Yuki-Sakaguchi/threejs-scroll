@@ -7,7 +7,6 @@ import {
   WebGLRenderer,
   PerspectiveCamera,
   BoxGeometry,
-  MeshBasicMaterial,
   MeshNormalMaterial,
   Mesh,
 } from "three";

@@ -137,7 +137,8 @@ export class Motion {
   }
 
   onRaf() {
-    const t = performance.now() / 1000;
+    // const t = performance.now() / 1000;
+
     // ここで足すことで自動スクロール
     // this.lerp_scroll.y.target += this.params.speed;
     this.toUpdateX();
